@@ -2,17 +2,14 @@
     {%- unless include.hide_heading -%}
     <h2 class="feed-heading">Notes</h2>
     {%- endunless -%}
-    <div class="feed-list">
+    <ul class="feed-list">
     {% assign note_items = site.notes | sort: "date" | reverse %}
     {% for note_items in note_items %}
         {%- if note_items.feed == "show" -%}
-            <div class="feed-item">
-                {%- if note_items.date -%}
-                <span class="feed-date">{{ note_items.date | date: "%Y · %m" }}</span>
-                {%- endif -%}
+            <li class="feed-item">
                 <a href="{{ site.baseurl }}{{ note_items.url }}" class="feed-title">{{ note_items.title }}</a>
-            </div>
+            </li>
         {%- endif -%}
     {%- endfor -%}
-    </div>
+    </ul>
 </section>

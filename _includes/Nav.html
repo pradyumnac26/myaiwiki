@@ -1,6 +1,10 @@
 <nav class="nav">
   <div class="nav-left">
     <a href="{{ site.baseurl }}/">{{ site.heading }}</a>
+    {%- if page.content-type == "notes" -%}
+    <span class="nav-separator">/</span>
+    <a href="{{ site.baseurl }}/notes" class="nav-section">notes</a>
+    {%- endif -%}
   </div>
 
   <div class="nav-right">

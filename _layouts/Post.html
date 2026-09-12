@@ -27,7 +27,7 @@
     <meta content="{{ site.url }}{{ page.url }}" property="og:url">
     {%- endif -%}
 
-    <title>{%- if page.title -%}{{ page.title }} - {%- endif -%}{{ site.heading }}</title>
+    <title>{%- if page.title and page.title != site.heading -%}{{ page.title }} - {%- endif -%}{{ site.heading }}</title>
     <link rel="canonical" href="{{site.url}}{{page.url}}" />
     {%- if site.apple_touch_icon -%}
     <link rel="apple-touch-icon" href="{{ site.baseurl }}{{ site.apple_touch_icon }}">
@@ -62,15 +62,16 @@
             
             <!-- Homepage Layout-->
             {%- if page.permalink == "/" -%}
-                {%- if site.preferences.homepage.enabled -%}
-                    <!--- Show content from index.md when homepage is enabled -->
-                    {%- include Content.html -%}
-                {%- else -%}
-                    <!--- Show content from notes.md + search + feed when homepage is disabled -->
-                    <h1 class="site-heading">{{page.title}}</h1>
-                    {%- include Content.html -%}
-                    {%- include Feed.html -%}
-                {%- endif -%}
+                <div class="home-page">
+                    {%- if site.preferences.homepage.enabled -%}
+                        <!--- Show content from index.md when homepage is enabled -->
+                        {%- include Content.html -%}
+                    {%- else -%}
+                        <!--- Show content from notes.md + search + feed when homepage is disabled -->
+                        {%- include Content.html -%}
+                        {%- include Feed.html -%}
+                    {%- endif -%}
+                </div>
             {%- endif -%}
 
             <!--- Notes Feed Layout-->
@@ -82,11 +83,16 @@
 
             <!--- Notes Layout-->
             {%- if page.content-type == "notes" -%}
-                <h1>{{page.title}}</h1>
-                {%- include Content.html -%}
-                {%- if site.preferences.backlinks.enabled -%}
-                {%- include Backlinks.html -%}
-                {%- endif -%}
+                <div class="note-page">
+                    <h1 class="note-page-title">{{page.title}}</h1>
+                    {%- if page.date -%}
+                    <p class="note-page-date">{{ page.date | date: "%B %-d, %Y" }}</p>
+                    {%- endif -%}
+                    {%- include Content.html -%}
+                    {%- if site.preferences.backlinks.enabled -%}
+                    {%- include Backlinks.html -%}
+                    {%- endif -%}
+                </div>
             {%- endif -%}
 
              <!--- Post Layout-->

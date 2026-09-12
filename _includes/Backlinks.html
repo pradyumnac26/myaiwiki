@@ -27,27 +27,27 @@
 {%- if site.preferences.backlinks.enabled -%}
 {%- assign display_class = 'show' -%}
 {%- endif -%}
-<div class="links-section {{display_class}}" id="jekyll-seamless-backlinks">
-    <h6>Links to this note</h6>
-    <ul class="links-grid">
+<div class="related-notes-section {{display_class}}" id="jekyll-seamless-backlinks">
+    <h3 class="related-notes-heading">You might also enjoy</h3>
+    <ul class="related-notes-list">
         {%- for note in site.notes -%}
         {%- if note.url != page.url -%}
             {%- if note.content contains wiki_link_title -%}
-            <li><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>
+            <li class="related-notes-item"><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>
             {%- endif -%}
         {%- endif -%}
         {%- endfor -%}
         {%- for note in site.posts -%}
         {%- if note.url != page.url -%}
             {%- if note.content contains wiki_link_title -%}
-            <li><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>
+            <li class="related-notes-item"><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>
             {%- endif -%}
         {%- endif -%}
         {%- endfor -%}
         {%- for note in site.pages -%}
         {%- if note.url != page.url -%}
             {%- if note.content contains wiki_link_title -%}
-            <li><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>
+            <li class="related-notes-item"><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>
             {%- endif -%}
         {%- endif -%}
         {%- endfor -%}

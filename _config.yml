@@ -48,8 +48,6 @@ ie_css: "/assets/css/ie-target.css"
 
 # Menu Items
 menu:
-  - title: "Blog"
-    url: "/blog"
   - title: "About"
     url: "/about"
 
