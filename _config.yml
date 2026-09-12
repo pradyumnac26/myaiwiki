@@ -38,7 +38,7 @@ preferences:
 title: "myaiwiki"
 heading: "myaiwiki"
 description: "myaiwiki"
-url: "https://yoursite.com"
+url: "https://myaiwiki.netlify.app"
 baseurl: ""
 
 # Asset Configuration
