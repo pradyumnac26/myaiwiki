@@ -1,0 +1,11 @@
+_site
+.jekyll-cache
+pages/.DS_Store
+pages/tags.md
+
+# Obsidian
+.obsidian/
+.trash/
+_notes/.obsidian
+_notes/Public/.obsidian
+_notes/Public/My First Note.md

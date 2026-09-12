@@ -1,0 +1,11 @@
+<div class="footer">
+  <div class="footer-left">
+    <h6>
+      {{ site.footer.text }}
+      <a href="{{ site.footer.author.url }}">{{ site.footer.author.name }}</a>
+      {%- if site.footer.credits.enabled -%}
+          • <a href="{{ site.baseurl }}{{ site.footer.credits.url }}">{{ site.footer.credits.text }}</a>
+      {%- endif -%}
+    </h6>
+  </div>
+</div>
