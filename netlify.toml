@@ -1,10 +1,11 @@
 [build]
-  command = "apt-get update -qq && apt-get install -y -qq imagemagick fonts-dejavu-core || true && bundle exec jekyll build"
+  command = "pip3 install -r requirements.txt && python3 scripts/generate_og_images.py && bundle exec jekyll build"
   publish = "_site"
 
 [build.environment]
   RUBY_VERSION = "3.1"
   JEKYLL_ENV = "production"
+  PYTHON_VERSION = "3.11"
 
 [[headers]]
   for = "/notes/*.png"
@@ -29,4 +30,4 @@
 [[headers]]
   for = "/assets/og/*"
   [headers.values]
-    Cache-Control = "public, max-age=86400"
+    Cache-Control = "public, max-age=3600"
