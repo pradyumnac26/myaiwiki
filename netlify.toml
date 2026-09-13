@@ -1,11 +1,10 @@
 [build]
-  command = "pip3 install -r requirements.txt && python3 scripts/generate_og_images.py && bundle exec jekyll build"
+  command = "bundle exec jekyll build"
   publish = "_site"
 
 [build.environment]
   RUBY_VERSION = "3.1"
   JEKYLL_ENV = "production"
-  PYTHON_VERSION = "3.11"
 
 [[headers]]
   for = "/notes/*.png"
@@ -26,8 +25,3 @@
   for = "/assets/img/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/assets/og/*"
-  [headers.values]
-    Cache-Control = "public, max-age=3600"

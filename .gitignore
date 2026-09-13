@@ -10,7 +10,4 @@ pages/tags.md
 _notes/.obsidian
 _notes/Public/.obsidian
 _notes/Excalidraw/
-assets/og/*.png
-assets/og/*.svg
-!assets/og/.gitkeep
 _notes/**/*.webp
