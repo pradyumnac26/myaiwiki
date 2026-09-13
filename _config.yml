@@ -76,6 +76,11 @@ defaults:
     values:
       layout: "Post"
       content-type: "notes"
+      feed: "hide"
+  - scope:
+      path: "_notes/Public"
+      type: "notes"
+    values:
       feed: "show"
   - scope:
       path: ""
@@ -108,3 +113,4 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - _notes/Excalidraw

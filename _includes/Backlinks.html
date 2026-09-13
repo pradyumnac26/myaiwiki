@@ -1,6 +1,7 @@
 {%- assign link_count = 0 -%}
 {%- assign wiki_link_title = '[' | append: page.title | append: ']' -%}
-{%- for note in site.notes -%}
+{%- include AssignPublicNotes.html -%}
+{%- for note in public_notes -%}
         {%- if note.url != page.url -%}
             {%- if note.content contains wiki_link_title -%}
                 {%- assign link_count = link_count | plus:1 -%}
@@ -30,7 +31,7 @@
 <div class="related-notes-section {{display_class}}" id="jekyll-seamless-backlinks">
     <h3 class="related-notes-heading">You might also enjoy</h3>
     <ul class="related-notes-list">
-        {%- for note in site.notes -%}
+        {%- for note in public_notes -%}
         {%- if note.url != page.url -%}
             {%- if note.content contains wiki_link_title -%}
             <li class="related-notes-item"><a href="{{ site.baseurl }}{{note.url}}">{{ note.title }}</a></li>

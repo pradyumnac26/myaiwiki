@@ -1,0 +1,1 @@
+{%- assign public_notes = site.notes | where_exp: "note", "note.path contains '/Public/'" | where_exp: "note", "note.feed == 'show'" -%}

@@ -3,8 +3,9 @@ permalink: /SearchData.json
 ---
 
 {
+  {%- include AssignPublicNotes.html -%}
   {%- assign i = 0 -%}
-  {%- for note in site.notes -%}
+  {%- for note in public_notes -%}
 
     "{{ i }}": {
        "doc":  {{ note.title | strip_html | escape | jsonify }},

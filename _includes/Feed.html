@@ -3,7 +3,8 @@
     <h2 class="feed-heading">Notes</h2>
     {%- endunless -%}
     <ul class="feed-list">
-    {% assign note_items = site.notes | sort: "date" | reverse %}
+    {%- include AssignPublicNotes.html -%}
+    {% assign note_items = public_notes | sort: "date" | reverse %}
     {% for note_items in note_items %}
         {%- if note_items.feed == "show" -%}
             <li class="feed-item">

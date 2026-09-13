@@ -412,16 +412,26 @@ html[data-theme="dark"] .theme-toggle .theme-toggle-moon {
 }
 
 /* Markdown Support */
-blockquote {
-  border-left: 4px solid var(--brand);
-  padding-left: var(--space-md);
-  margin: var(--space-lg) 0;
-  font-style: italic;
-  color: var(--text);
-  line-height: 1.6;
-  background: var(--bg2);
-  padding: var(--space-md);
-  border-radius: 0.25rem;
+.content blockquote {
+  margin: var(--space-md) 0;
+  padding: 0 0 0 0.875rem;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--title);
+  line-height: var(--line-height);
+}
+
+.content blockquote p {
+  margin: 0;
+}
+
+.content blockquote p + p {
+  margin-top: var(--space-sm);
 }
 
 code {
@@ -1179,8 +1189,11 @@ html[data-theme="dark"] .feed-title:hover {
   color: var(--brand) !important;
 }
 
-html[data-theme="dark"] blockquote {
-  border-left-color: #444444 !important;
+html[data-theme="dark"] .content blockquote {
+  border-left-color: var(--border) !important;
+  background: transparent !important;
+  color: var(--color-tx-normal) !important;
+  opacity: 0.9;
 }
 
 html[data-theme="dark"] .search-result-highlight {
