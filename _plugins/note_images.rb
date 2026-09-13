@@ -29,8 +29,10 @@ module Jekyll
 
       if magick_available?
         output = `magick identify -format '%w %h' #{Shellwords.escape(path)} 2>/dev/null`.strip
-        if output.match?(/\A(\d+) (\d+)\z/)
-          return ::Regexp.last_match(1).to_i, ::Regexp.last_match(2).to_i
+        if output.match(/(\d+)\s+(\d+)/)
+          width = ::Regexp.last_match(1).to_i
+          height = ::Regexp.last_match(2).to_i
+          return width, height if width.positive? && height.positive?
         end
       end
 
@@ -59,9 +61,16 @@ module Jekyll
       src.match?(/\.(png|jpe?g|gif)\z/i)
     end
 
+    def normalize_img_attrs(attrs)
+      attrs
+        .gsub(/\s(?:width|height|loading|decoding|fetchpriority|sizes)=["'][^"']*["']/i, '')
+        .gsub(%r{\s*/?\s*\z}, '')
+        .strip
+    end
+
     def build_picture(site, src, attrs, loading:, fetchpriority: nil)
       webp_src = webp_path_for(src)
-      use_webp = convertible_to_webp?(src)
+      use_webp = convertible_to_webp?(src) && magick_available?
       extra_attrs = []
       extra_attrs << %(loading="#{loading}")
       extra_attrs << %(decoding="async")
@@ -70,14 +79,11 @@ module Jekyll
 
       source_path = note_image_source(site, src)
       width, height = image_dimensions(source_path)
-      extra_attrs << %(width="#{width}") if width
-      extra_attrs << %(height="#{height}") if height
+      extra_attrs << %(width="#{width}") if width.to_i.positive?
+      extra_attrs << %(height="#{height}") if height.to_i.positive?
 
-      cleaned_attrs = attrs
-        .gsub(/\s(?:width|height|loading|decoding|fetchpriority|sizes)=["'][^"']*["']/i, '')
-        .strip
-
-      img_tag = "<img #{cleaned_attrs} #{extra_attrs.join(' ')}>".squeeze(' ')
+      cleaned_attrs = normalize_img_attrs(attrs)
+      img_tag = "<img #{[cleaned_attrs, extra_attrs.join(' ')].reject(&:empty?).join(' ')} />"
 
       return img_tag unless use_webp
 
@@ -162,6 +168,7 @@ module Jekyll
   module NoteImagesFilters
     def optimize_note_images(input)
       site = @context.registers[:site]
+      site = site.__site if site.respond_to?(:__site)
       Jekyll::NoteImages.optimize_html(site, input.to_s)
     end
   end

@@ -32,8 +32,7 @@
     <link href="{{ site.baseurl }}/assets/css/vendor/Katex.css" rel="stylesheet" media="all" class="default" />
     {%- endif -%}
     {%- if page.first_image -%}
-    {%- assign first_image_webp = page.first_image | replace: '.png', '.webp' | replace: '.jpg', '.webp' | replace: '.jpeg', '.webp' | replace: '.gif', '.webp' -%}
-    <link rel="preload" as="image" href="{{ site.baseurl }}{{ first_image_webp }}" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="{{ site.baseurl }}{{ page.first_image }}" fetchpriority="high">
     {%- endif -%}
 
     <!--[if IE]>
