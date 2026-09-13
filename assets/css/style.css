@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
 :root {
   --bg: rgb(255, 252, 240);
   --bg2: rgb(242, 240, 229);
@@ -9,7 +7,7 @@
   --border: rgb(230, 228, 217);
   --color-tx-marker: rgb(183, 181, 172);
   
-  --font: "Inter", sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --weight-medium: 400;
   --weight-bold: 600;
   
@@ -1035,10 +1033,18 @@ img {
 .content picture {
   display: block;
   margin: var(--space-md) 0;
+  background: var(--bg2);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .content picture img {
   margin: 0;
+}
+
+.content img {
+  background: var(--bg2);
+  border-radius: 6px;
 }
 
 .content img[width][height] {
@@ -1047,6 +1053,16 @@ img {
 
 .content img[loading="lazy"] {
   content-visibility: auto;
+}
+
+.content img:not(.is-loaded):not([loading="eager"]) {
+  opacity: 0;
+}
+
+.content img.is-loaded,
+.content img[loading="eager"] {
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 p a[href^="http://"], p a[href^="https://"],

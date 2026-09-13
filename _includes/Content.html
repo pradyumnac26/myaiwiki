@@ -7,6 +7,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     const contentDiv = document.querySelector('.content');
     if (!contentDiv) return;
+
+    contentDiv.querySelectorAll('img').forEach(function(img) {
+        function markLoaded() { img.classList.add('is-loaded'); }
+        if (img.complete) markLoaded();
+        else img.addEventListener('load', markLoaded, { once: true });
+    });
     
     // Get all available notes for link resolution
     const availableNotes = [

@@ -11,10 +11,6 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     {%- include SocialMeta.html -%}
     <meta content="{{ site.url }}/about/" property="article:author">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
     <title>{%- if page.title and page.title != site.heading -%}{{ page.title }} - {%- endif -%}{{ site.heading }}</title>
     <link rel="canonical" href="{{site.url}}{{page.url}}" />
     {%- if site.apple_touch_icon -%}

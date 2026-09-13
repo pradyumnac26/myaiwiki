@@ -18,8 +18,8 @@ except ImportError as exc:
 ROOT = Path(__file__).resolve().parents[1]
 NOTES_DIR = ROOT / "_notes" / "Public"
 OUTPUT_DIR = ROOT / "assets" / "og"
-FONT_CACHE = ROOT / ".cache" / "og-fonts" / "Inter-SemiBold.ttf"
-FONT_URL = "https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.ttf"
+FONT_CACHE = ROOT / ".cache" / "og-fonts" / "Inter-Medium.ttf"
+FONT_URL = "https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-500-normal.ttf"
 FALLBACK_PNG = ROOT / "assets" / "img" / "og-image.png"
 
 WIDTH = 1200
@@ -29,12 +29,13 @@ TITLE_COLOR = "#343331"
 BRAND = "#3AA99F"
 SITE_TITLE = "MyAIWiki"
 
+# San Francisco on macOS; Inter Medium on Linux/Netlify (closest open match)
 SYSTEM_FONTS = [
+    Path("/System/Library/Fonts/SFNS.ttf"),
+    Path("/System/Library/Fonts/SFCompact.ttf"),
     FONT_CACHE,
-    Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
-    Path("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"),
-    Path("/System/Library/Fonts/Supplemental/Arial Bold.ttf"),
-    Path("/Library/Fonts/Arial Bold.ttf"),
+    Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+    Path("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"),
 ]
 
 
@@ -99,10 +100,10 @@ def wrap_title(title: str, max_chars: int = 28, max_lines: int = 3) -> list[str]
 def font_size(lines: list[str]) -> int:
     longest = max(len(line) for line in lines)
     if len(lines) > 2 or longest > 24:
-        return 48
+        return 52
     if longest > 18:
-        return 56
-    return 64
+        return 60
+    return 68
 
 
 def draw_card(title: str, output_path: Path) -> None:
@@ -113,7 +114,7 @@ def draw_card(title: str, output_path: Path) -> None:
     image = Image.new("RGB", (WIDTH, HEIGHT), BG)
     draw = ImageDraw.Draw(image)
 
-    line_height = int(size * 1.25)
+    line_height = int(size * 1.3)
     block_height = line_height * len(lines)
     start_y = (HEIGHT - block_height) // 2
 
@@ -124,8 +125,8 @@ def draw_card(title: str, output_path: Path) -> None:
         x = (WIDTH - text_width) // 2
         draw.text((x, y), line, fill=TITLE_COLOR, font=font)
 
-    accent_y = min(start_y + block_height + 36, HEIGHT - 120)
-    draw.rounded_rectangle((520, accent_y, 680, accent_y + 4), radius=2, fill=BRAND)
+    accent_y = min(start_y + block_height + 40, HEIGHT - 100)
+    draw.rounded_rectangle((520, accent_y, 680, accent_y + 3), radius=2, fill=BRAND)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG", optimize=True)
