@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-# Jekyll Garden Configuration
+# MyAIWiki Configuration
 # Optimized for actual template usage
 
 # Preferences (controls template behavior)
@@ -35,9 +35,9 @@ preferences:
     enabled: true
 
 # Site Configuration
-title: "myaiwiki"
-heading: "myaiwiki"
-description: "myaiwiki"
+title: "MyAIWiki"
+heading: "MyAIWiki"
+description: "Personal AI knowledge wiki"
 url: "https://myaiwiki.netlify.app"
 baseurl: ""
 

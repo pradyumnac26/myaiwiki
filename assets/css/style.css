@@ -917,12 +917,71 @@ body.search-modal-open {
     right: 5px;
   }
 
+  .search-trigger-label {
+    display: none;
+  }
+
+  .search-trigger {
+    gap: 0;
+    padding: 0.2rem;
+    min-width: 28px;
+    min-height: 28px;
+    justify-content: center;
+  }
+
+  .search-trigger-icon {
+    opacity: 0.75;
+  }
+
+  .search-trigger-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .search-modal {
-    padding-top: 8vh;
+    padding: 64px var(--space-md) var(--space-md);
+    align-items: flex-start;
   }
 
   .search-modal-panel {
-    max-height: 80vh;
+    max-width: 100%;
+    max-height: min(80dvh, calc(100dvh - 8rem));
+    border-radius: 0.5rem;
+  }
+
+  .search-modal-header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .search-modal-body {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .search-modal-footer {
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .search-modal-hints {
+    display: none;
+  }
+
+  .search-modal-count {
+    margin-left: auto;
+    width: 100%;
+    text-align: right;
+  }
+
+  .search-result {
+    padding: var(--space-sm);
+  }
+
+  .search-result-title,
+  .search-result-doc-title {
+    font-size: 15.6375px;
+  }
+
+  .search-result-preview {
+    font-size: var(--scale-xs);
   }
   
   h1 {
@@ -960,6 +1019,11 @@ body.search-modal-open {
 
   .container > div {
     padding: 0 calc(var(--space-md) + var(--space-xs)) var(--space-md);
+  }
+
+  .search-modal {
+    padding-left: calc(var(--space-md) + var(--space-xs));
+    padding-right: calc(var(--space-md) + var(--space-xs));
   }
 
   .btn {
@@ -1188,9 +1252,7 @@ html[data-theme="dark"] .stale-link {
   .nav-left a,
   .nav-separator,
   .nav-left a.nav-section,
-  .nav-links a,
-  .search-trigger,
-  .search-trigger-label {
+  .nav-links a {
     font-size: 15.6375px;
     font-weight: 400;
   }
