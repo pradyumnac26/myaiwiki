@@ -883,7 +883,7 @@ body.search-modal-open {
 
 @media (max-width: 768px) {
   .container {
-    padding-top: var(--space-md);
+    padding-top: 20px;
   }
   
   .container > div {
@@ -893,6 +893,28 @@ body.search-modal-open {
   .nav {
     margin-bottom: var(--space-lg);
     align-items: flex-start;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 20px;
+    display: block;
+  }
+
+  .theme-toggle-thumb {
+    width: 10px;
+    height: 10px;
+    left: 5px;
+  }
+
+  .theme-toggle-thumb svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  html[data-theme="dark"] .theme-toggle-thumb {
+    left: auto;
+    right: 5px;
   }
 
   .search-modal {
@@ -914,11 +936,26 @@ body.search-modal-open {
   h3 {
     font-size: var(--scale-base);
   }
+
+  .note-page-title {
+    font-size: 22.5131px;
+    line-height: 28.1414px;
+    font-weight: 500;
+    margin-top: 33.77px;
+    margin-bottom: 5.63px;
+  }
+
+  p {
+    font-size: 15.6375px;
+    line-height: 23.4562px;
+    font-weight: 400;
+    margin-bottom: 15.6375px;
+  }
 }
 
 @media (max-width: 520px) {
   .container {
-    padding-top: var(--space-sm);
+    padding-top: 20px;
   }
 
   .container > div {
@@ -970,18 +1007,6 @@ html[data-theme="dark"] {
   --brand: rgb(58, 169, 159);
   --border: rgb(40, 39, 38);
   --nav-text: rgb(135, 133, 128);
-}
-
-html[data-theme="dark"] body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #a855f7 35%, #ec4899 50%, #a855f7 65%, transparent 100%);
-  z-index: 9999;
-  pointer-events: none;
 }
 
 html[data-theme="dark"] body {
@@ -1156,4 +1181,22 @@ html[data-theme="dark"] .search-hint kbd {
 html[data-theme="dark"] .stale-link {
   color: var(--color-tx-normal) !important;
   opacity: 0.45;
+}
+
+/* Navbar text sizing on mobile (must stay last to win over the dark-mode rules above) */
+@media (max-width: 768px) {
+  .nav-left a,
+  .nav-separator,
+  .nav-left a.nav-section,
+  .nav-links a,
+  .search-trigger,
+  .search-trigger-label {
+    font-size: 15.6375px;
+    font-weight: 400;
+  }
+
+  html[data-theme="dark"] .nav-left a {
+    font-size: 15.6375px;
+    font-weight: 400;
+  }
 }
