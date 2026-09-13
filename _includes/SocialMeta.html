@@ -1,0 +1,55 @@
+{%- comment -%}
+  Open Graph + Twitter Card meta tags.
+  Notes auto-use /assets/og/{slug}.png generated at build time.
+{%- endcomment -%}
+
+{%- assign social_title = page.title | default: site.title | default: site.heading -%}
+{%- if page.url == "/" -%}
+  {%- assign social_title = site.title | default: site.heading -%}
+{%- endif -%}
+
+{%- assign social_description = page.description | default: page.excerpt | default: site.description | strip_html | strip_newlines | truncate: 160 -%}
+
+{%- if page.content-type == "notes" -%}
+  {%- assign og_slug = page.url | split: "/" | last -%}
+  {%- assign social_image = "/assets/og/" | append: og_slug | append: ".png" -%}
+{%- elsif page.url == "/" -%}
+  {%- assign social_image = "/assets/og/site.png" -%}
+{%- else -%}
+  {%- assign social_image = page.og_image | default: page.image | default: site.og_image | default: "/assets/og/site.png" -%}
+{%- endif -%}
+
+{%- if social_image contains "://" -%}
+  {%- assign social_image_url = social_image -%}
+{%- else -%}
+  {%- assign social_image_url = site.url | append: site.baseurl | append: social_image -%}
+{%- endif -%}
+
+{%- if page.title -%}
+  {%- assign social_type = "article" -%}
+{%- else -%}
+  {%- assign social_type = "website" -%}
+{%- endif -%}
+
+{%- assign social_url = site.url | append: site.baseurl | append: page.url -%}
+
+<meta name="description" content="{{ social_description | escape }}">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="{{ site.title | default: site.heading | escape }}">
+<meta property="og:title" content="{{ social_title | escape }}">
+<meta property="og:description" content="{{ social_description | escape }}">
+<meta property="og:type" content="{{ social_type }}">
+<meta property="og:url" content="{{ social_url }}">
+<meta property="og:image" content="{{ social_image_url }}">
+<meta property="og:image:alt" content="{{ social_title | escape }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ social_title | escape }}">
+<meta name="twitter:description" content="{{ social_description | escape }}">
+<meta name="twitter:image" content="{{ social_image_url }}">
+<meta name="twitter:image:alt" content="{{ social_title | escape }}">
+{%- if site.twitter_username -%}
+<meta name="twitter:site" content="@{{ site.twitter_username }}">
+<meta name="twitter:creator" content="@{{ site.twitter_username }}">
+{%- endif -%}

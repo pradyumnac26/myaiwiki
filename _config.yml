@@ -43,6 +43,7 @@ baseurl: ""
 
 # Asset Configuration
 apple_touch_icon: "/assets/img/profile.png"
+og_image: "/assets/og/site.png"
 css_file: "/assets/css/style.css"
 ie_css: "/assets/css/ie-target.css"
 

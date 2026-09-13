@@ -9,23 +9,11 @@
       })();
     </script>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content="{{ site.title | default: site.heading }}" property="og:site_name" />
-    <meta content="{{ site.description | default: 'MyAIWiki' }}" property="og:description">
+    {%- include SocialMeta.html -%}
     <meta content="{{ site.url }}/about/" property="article:author">
-    {%- if site.og_image -%}
-    <meta property="og:image" content="{{ site.baseurl }}{{ site.og_image }}">
-    {%- endif -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    {%- if page.title -%}
-    <meta content="{{ page.title }}" property="og:title">
-    <meta content="article" property="og:type">
-    <meta content="{{ site.url }}{{ page.url }}" property="og:url">
-    {%- else -%}
-    <meta content="website" property="og:type">
-    <meta content="{{ site.url }}{{ page.url }}" property="og:url">
-    {%- endif -%}
 
     <title>{%- if page.title and page.title != site.heading -%}{{ page.title }} - {%- endif -%}{{ site.heading }}</title>
     <link rel="canonical" href="{{site.url}}{{page.url}}" />
@@ -42,6 +30,10 @@
     {%- endif -%}
     {%- if site.katex -%}
     <link href="{{ site.baseurl }}/assets/css/vendor/Katex.css" rel="stylesheet" media="all" class="default" />
+    {%- endif -%}
+    {%- if page.first_image -%}
+    {%- assign first_image_webp = page.first_image | replace: '.png', '.webp' | replace: '.jpg', '.webp' | replace: '.jpeg', '.webp' | replace: '.gif', '.webp' -%}
+    <link rel="preload" as="image" href="{{ site.baseurl }}{{ first_image_webp }}" type="image/webp" fetchpriority="high">
     {%- endif -%}
 
     <!--[if IE]>

@@ -1032,6 +1032,23 @@ img {
   margin: var(--space-md) 0;
 }
 
+.content picture {
+  display: block;
+  margin: var(--space-md) 0;
+}
+
+.content picture img {
+  margin: 0;
+}
+
+.content img[width][height] {
+  height: auto;
+}
+
+.content img[loading="lazy"] {
+  content-visibility: auto;
+}
+
 p a[href^="http://"], p a[href^="https://"],
 li a[href^="http://"], li a[href^="https://"] {
   position: relative;
