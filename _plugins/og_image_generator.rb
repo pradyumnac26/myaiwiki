@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'cgi'
 require 'fileutils'
 require 'net/http'
+require 'shellwords'
 require 'uri'
 
 module Jekyll
@@ -12,6 +14,7 @@ module Jekyll
     TITLE_COLOR = '#343331'
     BRAND = '#3AA99F'
     PUBLIC_PATH = '/Public/'
+    FALLBACK_PNG = 'assets/img/og-image.png'
     FONT_URL = 'https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.ttf'
 
     module_function
@@ -32,29 +35,6 @@ module Jekyll
 
     def title_for(note)
       note.data['title'].to_s.strip
-    end
-
-    def font_path(site)
-      cache_dir = File.join(site.source, '.cache', 'og-fonts')
-      font_file = File.join(cache_dir, 'Inter-SemiBold.ttf')
-      return font_file if File.exist?(font_file)
-
-      FileUtils.mkdir_p(cache_dir)
-      download_file(FONT_URL, font_file) ? font_file : nil
-    end
-
-    def download_file(url, destination)
-      uri = URI(url)
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
-        response = http.get(uri.request_uri)
-        return false unless response.is_a?(Net::HTTPSuccess)
-
-        File.binwrite(destination, response.body)
-      end
-      true
-    rescue StandardError => e
-      Jekyll.logger.warn 'OG Images:', "Font download failed (#{e.message})"
-      false
     end
 
     def title_lines(title, max_chars: 28, max_lines: 3)
@@ -96,29 +76,90 @@ module Jekyll
       [center + (text_block / 2) + 36, HEIGHT - 120].min
     end
 
+    def svg_for_title(title)
+      lines = title_lines(title)
+      font_size = font_size_for(lines)
+      line_height = (font_size * 1.25).round
+      total_height = line_height * lines.length
+      start_y = ((HEIGHT - total_height) / 2) + (font_size * 0.35).round
+
+      text_elements = lines.each_with_index.map do |line, index|
+        y = start_y + (index * line_height)
+        <<~SVG.strip
+          <text x="600" y="#{y}" text-anchor="middle"
+                font-family="DejaVu Sans, Arial, Helvetica, sans-serif"
+                font-size="#{font_size}" font-weight="600" fill="#{TITLE_COLOR}">#{CGI.escapeHTML(line)}</text>
+        SVG
+      end.join("\n")
+
+      accent_y = accent_y_for(lines.length, font_size)
+
+      <<~SVG
+        <svg width="#{WIDTH}" height="#{HEIGHT}" viewBox="0 0 #{WIDTH} #{HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+          <rect width="#{WIDTH}" height="#{HEIGHT}" fill="#{BG}"/>
+          #{text_elements}
+          <rect x="520" y="#{accent_y}" width="160" height="4" rx="2" fill="#{BRAND}"/>
+        </svg>
+      SVG
+    end
+
     def magick_available?
       @magick_available = system('which magick > /dev/null 2>&1') if @magick_available.nil?
       @magick_available
     end
 
-    def write_png(site, title, png_path)
-      unless magick_available?
-        Jekyll.logger.warn 'OG Images:', 'ImageMagick (magick) not found; skipping PNG generation'
-        return false
+    def convert_available?
+      @convert_available = system('which convert > /dev/null 2>&1') if @convert_available.nil?
+      @convert_available
+    end
+
+    def font_path(site)
+      cache_dir = File.join(site.source, '.cache', 'og-fonts')
+      font_file = File.join(cache_dir, 'Inter-SemiBold.ttf')
+      return font_file if File.exist?(font_file)
+
+      FileUtils.mkdir_p(cache_dir)
+      download_file(FONT_URL, font_file) ? font_file : nil
+    end
+
+    def download_file(url, destination)
+      uri = URI(url)
+      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+        response = http.get(uri.request_uri)
+        return false unless response.is_a?(Net::HTTPSuccess)
+
+        File.binwrite(destination, response.body)
+      end
+      true
+    rescue StandardError => e
+      Jekyll.logger.warn 'OG Images:', "Font download failed (#{e.message})"
+      false
+    end
+
+    def convert_svg_to_png(svg_path, png_path)
+      if magick_available?
+        return system('magick', '-background', BG, '-density', '300', svg_path, png_path)
       end
 
-      font = font_path(site)
-      unless font && File.exist?(font)
-        Jekyll.logger.warn 'OG Images:', 'Inter font unavailable; skipping PNG generation'
-        return false
+      if convert_available?
+        return system('convert', '-background', BG, '-density', '300', svg_path, png_path)
       end
+
+      false
+    end
+
+    def write_png_via_annotate(site, title, png_path)
+      return false unless magick_available?
+
+      font = font_path(site)
+      return false unless font && File.exist?(font)
 
       lines = title_lines(title)
       font_size = font_size_for(lines)
       label = lines.join("\n")
       accent_y = accent_y_for(lines.length, font_size)
 
-      args = [
+      system(
         'magick',
         '-size', "#{WIDTH}x#{HEIGHT}",
         "xc:#{BG}",
@@ -130,14 +171,34 @@ module Jekyll
         '-fill', BRAND,
         '-draw', "roundrectangle 520,#{accent_y} 680,#{accent_y + 4} 2,2",
         png_path
-      ]
+      )
+    end
 
-      if system(*args)
-        true
-      else
-        Jekyll.logger.warn 'OG Images:', "Failed to generate #{File.basename(png_path)}"
-        false
+    def copy_fallback_png(site, png_path)
+      fallback = File.join(site.source, FALLBACK_PNG)
+      return false unless File.exist?(fallback)
+
+      FileUtils.cp(fallback, png_path)
+      Jekyll.logger.warn 'OG Images:', "Used fallback PNG for #{File.basename(png_path)}"
+      true
+    end
+
+    def write_png(site, title, png_path)
+      svg_path = png_path.sub(/\.png\z/, '.svg')
+      File.write(svg_path, svg_for_title(title))
+
+      if convert_svg_to_png(svg_path, png_path)
+        File.delete(svg_path)
+        return true
       end
+
+      if write_png_via_annotate(site, title, png_path)
+        File.delete(svg_path)
+        return true
+      end
+
+      File.delete(svg_path)
+      copy_fallback_png(site, png_path)
     end
 
     def build!(site)
