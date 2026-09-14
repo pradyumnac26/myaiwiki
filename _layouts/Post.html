@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    {%- include SocialMeta.html -%}
     <script>
       (function () {
         var theme = localStorage.getItem('theme');
@@ -9,7 +10,6 @@
       })();
     </script>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    {%- include SocialMeta.html -%}
     <meta content="{{ site.url }}/about/" property="article:author">
     <title>{%- if page.title and page.title != site.heading -%}{{ page.title }} - {%- endif -%}{{ site.heading }}</title>
     <link rel="canonical" href="{{site.url}}{{page.url}}" />
